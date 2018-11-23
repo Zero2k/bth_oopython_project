@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'layout/head.html' %}
+<body>
+    <!-- Offcanvas Menu -->
+    {% include 'layout/offcanvas.html' %}
+    <!-- Navbar -->
+    {% include 'layout/navbar.html' %}
+    <!-- Header -->
+    {% block header %}{% endblock %}
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+    <!-- Footer -->
+    {% include 'layout/footer.html' %}
+    <!-- Search Modal -->
+    {% include 'layout/search_modal.html' %}
+    <!-- UIkit JS -->
+    {% include 'layout/scripts.html' %}
+</body>
+</html>

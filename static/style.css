@@ -1,0 +1,11 @@
+body {
+  font-family: 'Varela Round';
+}
+
+.uk-logo {
+    font-family: 'Varela Round';
+}
+
+.tm-button-default, .tm-button-primary {
+    border-radius: 500px;
+}
