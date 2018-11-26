@@ -1,0 +1,25 @@
+<div id="offcanvas-nav-primary" uk-offcanvas="mode: push; overlay: true">
+    <div class="uk-offcanvas-bar uk-flex uk-flex-column">
+        <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical">
+            <li {%- if request.path == "/" %} class="uk-active" {% endif %}><a href="{{ url_for('main') }}">Home</a></li>
+            <li class="uk-nav-divider"></li>
+            <li><a href="#">Restaurants</a></li>
+            <li class="uk-nav-divider"></li>
+            <li class="uk"><a href="#">Search</a></li>
+            <li class="uk-nav-header">Account</li>
+            <li class="uk-parent">
+                {% if not session.user_id %}
+                    <ul class="uk-nav-sub">
+                        <li><a href="{{ url_for('auth.signin') }}">Login</a></li>
+                        <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="uk-nav-sub">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+                    </ul>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
