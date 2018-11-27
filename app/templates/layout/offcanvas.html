@@ -15,7 +15,7 @@
                     </ul>
                 {% else %}
                     <ul class="uk-nav-sub">
-                        <li><a href="#">Profile</a></li>
+                        <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                     </ul>
                 {% endif %}

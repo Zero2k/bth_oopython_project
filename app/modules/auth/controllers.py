@@ -7,6 +7,9 @@ from werkzeug import check_password_hash, generate_password_hash
 # Import the database object from the main app module
 from app import db
 
+# Import the require_auth decorator from utils
+from app.utils.require_auth import require_auth
+
 # Import module forms
 from app.modules.auth.forms import LoginForm, SignupForm
 
@@ -32,6 +35,8 @@ def signin():
 
             session['user_id'] = user.id
 
+            flash('Welcome to Chefvenue.io - {}'.format(user.name), 'success-message')
+
             return redirect(url_for('main'))
 
         flash('Wrong email or password', 'error-message')
@@ -51,9 +56,9 @@ def signup():
         user = User.query.filter_by(email=form.email.data).first()
 
         if not user:
-            passwordHash = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+            password_hash = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
 
-            User.create(name=form.name.data, email=form.email.data, password=passwordHash)
+            User.create(name=form.name.data, email=form.email.data, password=password_hash)
 
             return redirect(url_for('auth.signin'))
 
@@ -63,8 +68,15 @@ def signup():
     return render_template("auth/signup.html", form=form)
 
 
+@auth.route('/profile')
+@require_auth
+def profile():
+    return render_template("auth/profile.html")
+
+
 @auth.route('/logout/', methods=['GET'])
 def logout():
 
     session.clear()
+    flash('You have logged out successfully!', 'success-message')
     return redirect(url_for('main'))

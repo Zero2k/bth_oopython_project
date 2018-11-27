@@ -16,5 +16,17 @@
     {% include 'layout/search_modal.html' %}
     <!-- UIkit JS -->
     {% include 'layout/scripts.html' %}
+    <!-- Notification -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == "success-message" %}
+                    <script>
+                        UIkit.notification({message: '{{ message }}', pos: 'bottom-right', status:'primary'});
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </body>
 </html>
