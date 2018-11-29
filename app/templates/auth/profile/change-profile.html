@@ -1,0 +1,37 @@
+<h6>CHANGE PROFILE</h6>
+{% macro render_field(field, placeholder=None) %}
+    {% set css_class = 'uk-input ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% endmacro %}
+<form method="POST" action="" accept-charset="UTF-8" role="form">
+    {{ form.csrf_token }}
+    <div class="uk-margin">
+        <input class="uk-input" type="text" placeholder="Username" value="{{user.name}}" disabled>
+    </div>
+
+    <div class="uk-margin">
+        {{ render_field(form.email, placeholder="Email") }}
+        {% for errors in form.errors.email %}
+        <small>
+            {{ errors }}
+        </small>
+        {% endfor %}
+    </div>
+
+    <div class="uk-margin">
+        {{ render_field(form.password, placeholder="Password") }}
+        {% for errors in form.errors.password %}
+        <small>
+            {{ errors }}
+        </small>
+        {% endfor %}
+    </div>
+
+    <div class="uk-margin">
+        <textarea class="uk-textarea" rows="5" placeholder="About"></textarea>
+    </div>
+
+    <div class="uk-margin">
+        <button class="uk-button uk-button-primary uk-button-default uk-width-1-1">Save</button>
+    </div>
+</form>

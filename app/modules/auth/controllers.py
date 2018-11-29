@@ -11,7 +11,7 @@ from app import db
 from app.utils.require_auth import require_auth
 
 # Import module forms
-from app.modules.auth.forms import LoginForm, SignupForm
+from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
@@ -22,7 +22,6 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 # Set the route and accepted methods
 @auth.route('/sign-in/', methods=['GET', 'POST'])
 def signin():
-
     # If sign in form is submitted
     form = LoginForm(request.form)
 
@@ -41,12 +40,11 @@ def signin():
 
         flash('Wrong email or password', 'error-message')
 
-    return render_template("auth/signin.html", form=form)
+    return render_template('auth/signin.html', form=form)
 
 
 @auth.route('/sign-up/', methods=['GET', 'POST'])
 def signup():
-
     # If sign up form is submitted
     form = SignupForm(request.form)
 
@@ -65,18 +63,46 @@ def signup():
         else:
             flash('User already exists', 'error-message')
 
-    return render_template("auth/signup.html", form=form)
+    return render_template('auth/signup.html', form=form)
 
 
-@auth.route('/profile')
+@auth.route('/profile', methods=['GET', 'POST'])
 @require_auth
 def profile():
-    return render_template("auth/profile.html")
+    view = request.args.get('view')
+    user_data = User.get(session.get('user_id'))
+
+    if (view == 'change-profile'):
+        # If change user form is submitted
+        form = ChangeUserForm(request.form, email=user_data.email)
+
+        # Verify the user change form
+        if form.validate_on_submit():
+            user_data.email = form.email.data
+            if (form.password.data == ""):
+                user_data.password = user_data.password
+
+            else:
+                user_data.password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+
+            # Updated database with new user data
+            User.update(user_data)
+
+            return redirect(url_for('auth.profile'))
+
+        partial = render_template('auth/profile/change-profile.html', user=user_data, form=form)
+
+    elif (view == 'payments'):
+        partial = render_template('auth/profile/payments.html')
+
+    else:
+        partial = render_template('auth/profile/reservations.html')
+
+    return render_template('auth/profile/profile.html', render=partial, user=user_data)
 
 
 @auth.route('/logout/', methods=['GET'])
 def logout():
-
     session.clear()
     flash('You have logged out successfully!', 'success-message')
     return redirect(url_for('main'))

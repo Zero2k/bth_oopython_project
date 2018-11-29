@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import TextField, PasswordField
-from wtforms.validators import Required, Email, EqualTo
+from wtforms.validators import Required, Email, EqualTo, Length, Optional
 
 # Define the login and sign up forms (WTForms)
 
@@ -18,3 +18,8 @@ class SignupForm(FlaskForm):
                 Required(message='Forgot your email address?')])
     password = PasswordField('Password', [
                 Required(message='Must provide a password. ;-)')])
+
+
+class ChangeUserForm(FlaskForm):
+    email    = TextField('email', [Email()])
+    password = PasswordField('password', [Optional(), Length(min=6, max=35)])

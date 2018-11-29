@@ -23,21 +23,17 @@ class User(Base, ORMClass):
     password = db.Column(db.String(192), nullable=False)
 
     # Authorisation Data: role & status
-    role     = db.Column(db.SmallInteger, nullable=False)
-    status   = db.Column(db.SmallInteger, nullable=False)
-
-    # New instance instantiation procedure
-    def __init__(self, name, email, password):
-
-        self.name     = name
-        self.email    = email
-        self.password = password
-        self.role     = 0
-        self.status   = 0
+    role     = db.Column(db.SmallInteger, nullable=False, default=0)
+    status   = db.Column(db.SmallInteger, nullable=False, default=0)
 
     @classmethod
     def create(cls, **kw):
         obj = cls(**kw)
+        db.session.add(obj)
+        db.session.commit()
+
+    @classmethod
+    def update(cls, obj):
         db.session.add(obj)
         db.session.commit()
 
