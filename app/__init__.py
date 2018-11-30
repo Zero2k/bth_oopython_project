@@ -26,11 +26,13 @@ def main():
 def not_found(error):
     return render_template('404.html', title="Page Not Found"), 404
 
-# Import a module / component using its blueprint handler variable (mod_auth)
+# Import a modules / components using its blueprint handler variable
 from app.modules.auth.controllers import auth as auth_module
+from app.modules.restaurant.controllers import restaurant as restaurant_module
 
 # Register blueprint(s)
 app.register_blueprint(auth_module)
+app.register_blueprint(restaurant_module)
 # app.register_blueprint(xyz_module)
 # ..
 

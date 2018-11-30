@@ -92,9 +92,6 @@ def profile():
 
         partial = render_template('auth/profile/change-profile.html', user=user_data, form=form)
 
-    elif (view == 'payments'):
-        partial = render_template('auth/profile/payments.html')
-
     else:
         partial = render_template('auth/profile/reservations.html')
 
