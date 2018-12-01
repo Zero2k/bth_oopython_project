@@ -9,6 +9,7 @@ from app import db
 
 # Import the require_auth decorator from utils
 from app.utils.require_auth import require_auth
+from app.utils.require_auth_admin import require_auth_admin
 
 # Import module forms
 from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm
@@ -33,6 +34,7 @@ def signin():
         if user and check_password_hash(user.password, form.password.data):
 
             session['user_id'] = user.id
+            session['user_role'] = user.role
 
             flash('Welcome to Chefvenue.io - {}'.format(user.name), 'success-message')
 
@@ -96,6 +98,21 @@ def profile():
         partial = render_template('auth/profile/reservations.html')
 
     return render_template('auth/profile/profile.html', render=partial, user=user_data)
+
+
+@auth.route('/admin', methods=['GET', 'POST'])
+@require_auth_admin
+def admin():
+    view = request.args.get('view')
+
+    if (view == 'resturants'):
+        partial = render_template('auth/admin/resturants.html')
+
+    else:
+        user_list = User.query.all()
+        partial = render_template('auth/admin/users.html', users=user_list)
+
+    return render_template('auth/admin/admin.html', render=partial)
 
 
 @auth.route('/logout/', methods=['GET'])

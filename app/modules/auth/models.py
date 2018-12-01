@@ -2,15 +2,6 @@ from app import db
 from app.modules.base import Base
 from app.modules.orm import ORMClass
 
-# Define a base model for other database tables to inherit
-""" class Base(db.Model):
-
-    __abstract__  = True
-
-    id            = db.Column(db.Integer, primary_key=True)
-    date_created  = db.Column(db.DateTime,  default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(), onupdate=db.func.current_timestamp()) """
-
 # Define a User model
 class User(Base, ORMClass):
 
@@ -27,16 +18,16 @@ class User(Base, ORMClass):
     role     = db.Column(db.SmallInteger, nullable=False, default=0)
     status   = db.Column(db.SmallInteger, nullable=False, default=0)
 
-    @classmethod
+    """ @classmethod
     def create(cls, **kw):
         obj = cls(**kw)
         db.session.add(obj)
-        db.session.commit()
+        db.session.commit() """
 
-    @classmethod
+    """ @classmethod
     def update(cls, obj):
         db.session.add(obj)
-        db.session.commit()
+        db.session.commit() """
 
     def __repr__(self):
         return '<User %r>' % (self.name)  

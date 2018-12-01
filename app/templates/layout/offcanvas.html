@@ -16,7 +16,11 @@
                 {% else %}
                     <ul class="uk-nav-sub">
                         <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+                        {% if session.user_role %}
+                            <li><a href="{{ url_for('auth.admin') }}">Admin</a></li>
+                        {% else %}
                         <li><a href="{{ url_for('auth.profile', view=['reservations']) }}">Reservations</a></li>
+                        {% endif %}
                         <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                     </ul>
                 {% endif %}
