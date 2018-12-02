@@ -16,6 +16,7 @@ from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
+from app.modules.restaurant.models import Restaurant
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 auth = Blueprint('auth', __name__, url_prefix='/auth')
@@ -62,8 +63,7 @@ def signup():
 
             return redirect(url_for('auth.signin'))
 
-        else:
-            flash('User already exists', 'error-message')
+        flash('User already exists', 'error-message')
 
     return render_template('auth/signup.html', form=form)
 
@@ -104,13 +104,24 @@ def profile():
 @require_auth_admin
 def admin():
     view = request.args.get('view')
+    action = request.args.get('action')
 
     if (view == 'resturants'):
-        partial = render_template('auth/admin/resturants.html')
+        if (action == 'add'):
+            partial = render_template('auth/admin/resturants/add.html')
+
+        else:
+            # Query all restaurants which an admin has created
+            restaurant_list = Restaurant.query.filter(User.role == 1).all()
+            partial = render_template('auth/admin/resturants/resturants.html', restaurants=restaurant_list)
 
     else:
-        user_list = User.query.all()
-        partial = render_template('auth/admin/users.html', users=user_list)
+        if (action == 'add'):
+            partial = render_template('auth/admin/users/add.html')
+
+        else:
+            user_list = User.query.all()
+            partial = render_template('auth/admin/users/users.html', users=user_list)
 
     return render_template('auth/admin/admin.html', render=partial)
 

@@ -8,8 +8,10 @@ class Restaurant(Base, ORMClass):
     __tablename__ = 'restaurant'
 
     # Restaurant fields
-    name    = db.Column(db.String(128),  nullable=False)
+    name    = db.Column(db.String(250),  nullable=False)
+    address = db.Column(db.String(250), nullable=True)
     tables  = db.relationship('Table', backref='table', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 # Define a Table model

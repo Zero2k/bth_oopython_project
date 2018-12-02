@@ -1,9 +1,10 @@
-<h6>ALL USRS</h6>
+<h6>ALL USERS</h6>
 <table class="uk-table uk-table-divider">
     <thead>
         <tr>
             <th>Username</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Created At</th>
             <th>Action</th>
         </tr>
@@ -13,9 +14,11 @@
         <tr>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
             <td>{{ user.date_created }}</td>
             <td>Edit | Delete</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<a class="uk-button uk-button-default uk-width-1-1" href="{{ url_for('auth.admin', view=['users'], action=['add']) }}">Add User</a>

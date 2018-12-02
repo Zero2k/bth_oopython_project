@@ -18,16 +18,7 @@ class User(Base, ORMClass):
     role     = db.Column(db.SmallInteger, nullable=False, default=0)
     status   = db.Column(db.SmallInteger, nullable=False, default=0)
 
-    """ @classmethod
-    def create(cls, **kw):
-        obj = cls(**kw)
-        db.session.add(obj)
-        db.session.commit() """
-
-    """ @classmethod
-    def update(cls, obj):
-        db.session.add(obj)
-        db.session.commit() """
+    restaurants  = db.relationship('Restaurant', backref='restaurant', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % (self.name)  
