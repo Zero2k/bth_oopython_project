@@ -22,4 +22,4 @@ class Table(Base, ORMClass):
     # Table fields
     capacity      = db.Column(db.Integer, nullable=False)
     minimum       = db.Column(db.Integer, nullable=False)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id', ondelete='CASCADE'), nullable=False)

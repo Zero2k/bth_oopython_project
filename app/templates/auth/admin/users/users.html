@@ -16,7 +16,10 @@
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
             <td>{{ user.date_created }}</td>
-            <td>Edit | Delete</td>
+            <td>
+                <a href="{{ url_for('auth.admin', view=['users'], action=['edit'], userId=[user.id]) }}">Edit</a> | 
+                <a href="{{ url_for('auth.admin', view=['users'], action=['delete'], userId=[user.id]) }}" class="delete" data-confirm="Are you sure to delete this item?">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

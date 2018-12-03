@@ -12,7 +12,7 @@ from app.utils.require_auth import require_auth
 from app.utils.require_auth_admin import require_auth_admin
 
 # Import module forms
-from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm
+from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm, ChangeUserFormAdmin
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
@@ -72,32 +72,37 @@ def signup():
 @require_auth
 def profile():
     view = request.args.get('view')
-    user_data = User.get(session.get('user_id'))
+    user_id = session.get('user_id')
 
     if (view == 'change-profile'):
-        # If change user form is submitted
-        form = ChangeUserForm(request.form, email=user_data.email)
+        user_data = User.get(user_id)
+        form = ChangeUserForm(request.form, name=user_data.name, email=user_data.email)
 
-        # Verify the user change form
-        if form.validate_on_submit():
-            user_data.email = form.email.data
-            if (form.password.data == ""):
-                user_data.password = user_data.password
+        try:
+            if form.validate_on_submit():
+                user_data.name = form.name.data
+                user_data.email = form.email.data
+                if (form.password.data == ""):
+                    user_data.password = user_data.password
 
-            else:
-                user_data.password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+                else:
+                    user_data.password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
 
-            # Updated database with new user data
-            User.update(user_data)
+                flash('User was updated!', 'success-message')
+                # Updated database with new user data
+                User.update(user_data)
 
-            return redirect(url_for('auth.profile'))
+                return redirect(url_for('auth.profile'))
+
+        except Exception as e:
+            flash('Email already exists', 'error-message')
 
         partial = render_template('auth/profile/change-profile.html', user=user_data, form=form)
 
     else:
         partial = render_template('auth/profile/reservations.html')
 
-    return render_template('auth/profile/profile.html', render=partial, user=user_data)
+    return render_template('auth/profile/profile.html', render=partial)
 
 
 @auth.route('/admin', methods=['GET', 'POST'])
@@ -117,7 +122,69 @@ def admin():
 
     else:
         if (action == 'add'):
-            partial = render_template('auth/admin/users/add.html')
+            form = SignupForm(request.form)
+
+            try:
+                if form.validate_on_submit():
+
+                    user = User.query.filter_by(email=form.email.data).first()
+
+                    if not user:
+                        password_hash = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+
+                        User.create(name=form.name.data, email=form.email.data, password=password_hash)
+
+                        return redirect(url_for('auth.admin', view=['users']))
+
+                    flash('User already exists', 'error-message')
+
+            except Exception as e:
+                print(e)
+
+            partial = render_template('auth/admin/users/add.html', form=form)
+
+        elif (action == 'edit'):
+            user_id = request.args.get('userId')
+            user_data = User.get(user_id)
+
+            form = ChangeUserFormAdmin(request.form, name=user_data.name, email=user_data.email, role=user_data.role)
+
+            try:
+                if form.validate_on_submit():
+                    user_data.name = form.name.data
+                    user_data.email = form.email.data
+                    user_data.role = form.role.data
+                    if (form.password.data == ""):
+                        user_data.password = user_data.password
+
+                    else:
+                        user_data.password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+
+                    flash('User was updated!', 'success-message')
+                    # Updated database with new user data
+                    User.update(user_data)
+
+                    return redirect(url_for('auth.admin', view=['users']))
+
+            except Exception as e:
+                flash('Email already exists', 'error-message')
+
+            partial = render_template('auth/admin/users/edit.html', user=user_data, form=form)
+
+        elif (action == 'delete'):
+            user_id = request.args.get('userId')
+            logged_in_user = session.get('user_id')
+
+            user_to_delete = User.get(user_id)
+
+            if (int(logged_in_user) is int(user_id)):
+                flash("You can't delete yourself.", 'warning-message')
+                return redirect(url_for('auth.admin', view=['users']))
+
+            else:
+                User.delete(user_to_delete)
+                flash('User was deleted!', 'success-message')
+                return redirect(url_for('auth.admin', view=['users']))
 
         else:
             user_list = User.query.all()

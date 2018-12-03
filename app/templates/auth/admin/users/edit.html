@@ -1,4 +1,4 @@
-<h6>CHANGE PROFILE</h6>
+<h6>EDIT USER</h6>
 {% macro render_field(field, placeholder=None) %}
     {% set css_class = 'uk-input ' + kwargs.pop('class', '') %}
     {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
@@ -25,6 +25,10 @@
             {{ errors }}
         </small>
         {% endfor %}
+    </div>
+
+    <div class="uk-margin">
+        {{ render_field(form.role, placeholder="Role") }}
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

@@ -24,6 +24,10 @@
                     <script>
                         UIkit.notification({message: '{{ message }}', pos: 'bottom-right', status:'primary'});
                     </script>
+                {% elif category == "warning-message" %}
+                    <script>
+                        UIkit.notification({message: '{{ message }}', pos: 'bottom-right', status:'warning'});
+                    </script>
                 {% endif %}
             {% endfor %}
         {% endif %}

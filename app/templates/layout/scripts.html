@@ -1,2 +1,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit-icons.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$('.delete').on("click", function (e) {
+    e.preventDefault();
+
+    var choice = confirm($(this).attr('data-confirm'));
+
+    if (choice) {
+        window.location.href = $(this).attr('href');
+    }
+});
+</script>
