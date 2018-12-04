@@ -4,13 +4,16 @@
     <div class="uk-grid-divider" uk-grid>
         <div class="uk-width-1-4@m">
             <div>
-                <ul class="uk-nav uk-nav-parent-icon" uk-nav>
-                    <li class="uk-active">
-                        <a href="{{ url_for('auth.admin', view=['users']) }}">Users</a>
-                    </li>
-                    <li><a href="{{ url_for('auth.admin', view=['resturants']) }}">Resturants</a></li>
-                    <li class="uk-nav-divider"></li>
-                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                <ul class="uk-nav uk-nav-parent-icon">
+                    <li><a href="{{ url_for('auth.admin', view=['users']) }}">Users</a></li>
+                    <li><a href="{{ url_for('auth.admin', view=['restaurants']) }}">Restaurants</a></li>
+                    <!-- <li class="uk-parent">
+                        <a href="{{ url_for('auth.admin', view=['restaurants']) }}">Restaurants</a>
+                        <ul class="uk-nav-sub">
+                            <li><a href="#">Tables</a></li>
+                        </ul>
+                    </li> -->
+                    <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                 </ul>
             </div>
         </div>

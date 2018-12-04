@@ -13,6 +13,7 @@ from app.utils.require_auth_admin import require_auth_admin
 
 # Import module forms
 from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm, ChangeUserFormAdmin
+from app.modules.restaurant.forms import RestaurantFormAdmin
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
@@ -111,14 +112,69 @@ def admin():
     view = request.args.get('view')
     action = request.args.get('action')
 
-    if (view == 'resturants'):
-        if (action == 'add'):
-            partial = render_template('auth/admin/resturants/add.html')
+    if (view == 'restaurants'):
+        if (action == 'overview'):
+            partial = render_template('auth/admin/restaurants/view.html')
+
+        elif (action == 'add'):
+            user_id = session.get('user_id')
+
+            form = RestaurantFormAdmin(request.form)
+
+            try:
+                if form.validate_on_submit():
+
+                    restaurant = Restaurant.query.filter_by(name=form.name.data).first()
+
+                    if not restaurant:
+                        Restaurant.create(name=form.name.data, address=form.address.data, user_id=user_id)
+
+                        return redirect(url_for('auth.admin', view=['restaurants']))
+
+                    flash('Restaurant already exists', 'error-message')
+
+            except Exception as e:
+                print(e)
+
+            partial = render_template('auth/admin/restaurants/add.html', form=form)
+
+        elif (action == 'edit'):
+            restaurant_id = request.args.get('restaurantId')
+            restaurant_data = Restaurant.get(restaurant_id)
+
+            form = RestaurantFormAdmin(request.form, name=restaurant_data.name, address=restaurant_data.address)
+
+            try:
+                if form.validate_on_submit():
+                    restaurant_data.name = form.name.data
+                    restaurant_data.address = form.address.data
+
+                    flash('Restaurant was updated!', 'success-message')
+                    # Updated database with new restaurant data
+                    Restaurant.update(restaurant_data)
+
+                    return redirect(url_for('auth.admin', view=['restaurants']))
+
+            except Exception as e:
+                print(e)
+
+            partial = render_template('auth/admin/restaurants/edit.html', form=form)
+
+        elif (action == 'delete'):
+            restaurant_id = request.args.get('restaurantId')
+
+            restaurant_to_delete = Restaurant.get(restaurant_id)
+
+            if (restaurant_to_delete):
+                Restaurant.delete(restaurant_to_delete)
+
+                flash('Restaurant was deleted!', 'success-message')
+                return redirect(url_for('auth.admin', view=['restaurants']))
 
         else:
             # Query all restaurants which an admin has created
             restaurant_list = Restaurant.query.filter(User.role == 1).all()
-            partial = render_template('auth/admin/resturants/resturants.html', restaurants=restaurant_list)
+            partial = render_template('auth/admin/restaurants/restaurants.html', restaurants=restaurant_list)
 
     else:
         if (action == 'add'):
