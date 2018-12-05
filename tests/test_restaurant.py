@@ -12,5 +12,5 @@ class TestRestaurantModule(unittest.TestCase):
 
     def test_create_table(self):
         restaurant = Restaurant.create(name="Restaurant Name", user_id=1)
-        table = Table.create(capacity=4, minimum=2, restaurant_id=restaurant.id)
+        table = Table.create(name="table 1", capacity=4, minimum=2, restaurant_id=restaurant.id)
         self.assertEqual(table.restaurant_id, restaurant.id)

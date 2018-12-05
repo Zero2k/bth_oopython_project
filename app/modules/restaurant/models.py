@@ -20,6 +20,7 @@ class Table(Base, ORMClass):
     __tablename__ = 'table_data'
 
     # Table fields
+    name          = db.Column(db.String(250),  nullable=False)
     capacity      = db.Column(db.Integer, nullable=False)
     minimum       = db.Column(db.Integer, nullable=False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id', ondelete='CASCADE'), nullable=False)

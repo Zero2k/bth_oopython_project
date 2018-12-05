@@ -15,7 +15,7 @@
                 <a href="{{ url_for('auth.admin', view=['restaurants'], action=['overview'], restaurantId=[restaurant.id]) }}">{{ restaurant.name }}</a>
             </td>
             <td>{{ restaurant.address }}</td>
-            <td>{{ restaurant.date_created }}</td>
+            <td>{{ restaurant.date_created.strftime('%Y-%m-%d') }}</td>
             <td>
                 <a href="{{ url_for('auth.admin', view=['restaurants'], action=['edit'], restaurantId=[restaurant.id]) }}">Edit</a> | 
                 <a href="{{ url_for('auth.admin', view=['restaurants'], action=['delete'], restaurantId=[restaurant.id]) }}">Delete</a>

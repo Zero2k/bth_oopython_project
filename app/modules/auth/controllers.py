@@ -13,11 +13,11 @@ from app.utils.require_auth_admin import require_auth_admin
 
 # Import module forms
 from app.modules.auth.forms import LoginForm, SignupForm, ChangeUserForm, ChangeUserFormAdmin
-from app.modules.restaurant.forms import RestaurantFormAdmin
+from app.modules.restaurant.forms import RestaurantFormAdmin, TableFormAdmin
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
-from app.modules.restaurant.models import Restaurant
+from app.modules.restaurant.models import Restaurant, Table
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 auth = Blueprint('auth', __name__, url_prefix='/auth')
@@ -113,9 +113,56 @@ def admin():
     action = request.args.get('action')
 
     if (view == 'restaurants'):
+        # View restaurant
         if (action == 'overview'):
-            partial = render_template('auth/admin/restaurants/view.html')
+            restaurant_id = request.args.get('restaurantId')
+            restaurant_data = Restaurant.get(restaurant_id)
+            table_list = Table.query.filter(Table.restaurant_id == restaurant_id).all()
 
+            partial = render_template('auth/admin/restaurants/view.html', restaurant=restaurant_data, tables=table_list)
+
+        # Add restaurant
+        elif (action == 'add-table'):
+            restaurant_id = request.args.get('restaurantId')
+            
+            form = TableFormAdmin(request.form)
+
+            try:
+                if form.validate_on_submit():
+                    Table.create(name=form.name.data, capacity=form.capacity.data, minimum=form.minimum.data, restaurant_id=restaurant_id)
+
+                    flash('Table was created!', 'success-message')
+                    return redirect(url_for('auth.admin', view=['restaurants']))
+
+            except Exception as e:
+                print(e)
+
+            partial = render_template('auth/admin/restaurants/tables/add.html', form=form)
+
+        # Edit restaurant
+        elif (action == 'edit-table'):
+            table_id = request.args.get('tableId')
+            table_data = Table.get(table_id)
+
+            form = TableFormAdmin(request.form, name=table_data.name, capacity=table_data.capacity, minimum=table_data.minimum)
+
+            try:
+                if form.validate_on_submit():
+                    table_data.name = form.name.data
+                    table_data.capacity = form.capacity.data
+                    table_data.minimum = form.minimum.data
+                    flash('Table was updated!', 'success-message')
+                    # Updated database with new table data
+                    Table.update(table_data)
+
+                    return redirect(url_for('auth.admin', view=['restaurants']))
+
+            except Exception as e:
+                print(e)
+
+            partial = render_template('auth/admin/restaurants/tables/edit.html', form=form)
+
+        # Add restaurant
         elif (action == 'add'):
             user_id = session.get('user_id')
 
@@ -138,6 +185,7 @@ def admin():
 
             partial = render_template('auth/admin/restaurants/add.html', form=form)
 
+        # Edit restaurant
         elif (action == 'edit'):
             restaurant_id = request.args.get('restaurantId')
             restaurant_data = Restaurant.get(restaurant_id)
@@ -160,9 +208,9 @@ def admin():
 
             partial = render_template('auth/admin/restaurants/edit.html', form=form)
 
+        # Delete restaurant
         elif (action == 'delete'):
             restaurant_id = request.args.get('restaurantId')
-
             restaurant_to_delete = Restaurant.get(restaurant_id)
 
             if (restaurant_to_delete):
@@ -177,6 +225,7 @@ def admin():
             partial = render_template('auth/admin/restaurants/restaurants.html', restaurants=restaurant_list)
 
     else:
+        # Add user
         if (action == 'add'):
             form = SignupForm(request.form)
 
@@ -199,6 +248,7 @@ def admin():
 
             partial = render_template('auth/admin/users/add.html', form=form)
 
+        # Edit user
         elif (action == 'edit'):
             user_id = request.args.get('userId')
             user_data = User.get(user_id)
@@ -227,6 +277,7 @@ def admin():
 
             partial = render_template('auth/admin/users/edit.html', user=user_data, form=form)
 
+        # Delete user
         elif (action == 'delete'):
             user_id = request.args.get('userId')
             logged_in_user = session.get('user_id')
