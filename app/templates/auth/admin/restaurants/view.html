@@ -6,7 +6,8 @@
                 <a href="{{ url_for('auth.admin', view=['restaurants'], action=['edit'], restaurantId=[restaurant.id]) }}" class="uk-button uk-button-default uk-align-right">Edit</a>
                 <span>
                     <h4>Name: {{ restaurant.name }}</h4>
-                    <small>Address: {{ restaurant.address }}</small>
+                    <small>Address: {{ restaurant.address }} | </small>
+                    <small>Food: {{ restaurant.food }}</small>
                 </span>
             </div>
         </div>
@@ -30,9 +31,9 @@
                 <td>{{ table.name }}</td>
                 <td>{{ table.capacity }}</td>
                 <td>{{ table.minimum }}</td>
-                <td>
+                <td class="uk-table-shrink uk-text-nowrap">
                     <a href="{{ url_for('auth.admin', view=['restaurants'], action=['edit-table'], tableId=[table.id]) }}">Edit</a> | 
-                    <a href="">Delete</a>
+                    <a href="{{ url_for('auth.admin', view=['restaurants'], action=['delete-table'], tableId=[table.id]) }}" class="delete" data-confirm="Are you sure to delete this item?">Delete</a>
                 </td>
             </tr>
             {% endfor %}

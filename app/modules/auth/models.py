@@ -8,7 +8,7 @@ class User(Base, ORMClass):
     __tablename__ = 'user'
 
     # User Name
-    name    = db.Column(db.String(128),  nullable=False)
+    name     = db.Column(db.String(128),  nullable=False)
 
     # Identification Data: email & password
     email    = db.Column(db.String(128), nullable=False, unique=True)

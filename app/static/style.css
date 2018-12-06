@@ -1,5 +1,5 @@
 body {
-  font-family: 'Varela Round';
+    font-family: 'Varela Round';
 }
 
 .uk-logo {
@@ -8,4 +8,8 @@ body {
 
 .tm-button-default, .tm-button-primary {
     border-radius: 500px;
+}
+
+.checked {
+    color: orange;
 }

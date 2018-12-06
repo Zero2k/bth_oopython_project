@@ -8,10 +8,11 @@ class Restaurant(Base, ORMClass):
     __tablename__ = 'restaurant'
 
     # Restaurant fields
-    name    = db.Column(db.String(250),  nullable=False)
-    address = db.Column(db.String(250), nullable=True)
-    tables  = db.relationship('Table', backref='table', lazy=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name        = db.Column(db.String(250),  nullable=False)
+    address     = db.Column(db.String(250), nullable=True)
+    food        = db.Column(db.String(250), nullable=True)
+    tables      = db.relationship('Table', backref='table', cascade="all, delete-orphan", lazy=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 # Define a Table model
@@ -23,4 +24,4 @@ class Table(Base, ORMClass):
     name          = db.Column(db.String(250),  nullable=False)
     capacity      = db.Column(db.Integer, nullable=False)
     minimum       = db.Column(db.Integer, nullable=False)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id', ondelete='CASCADE'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))

@@ -6,7 +6,7 @@ from app.modules.restaurant.models import Restaurant, Table
 class TestRestaurantModule(unittest.TestCase):
 
     def test_create_restaurant(self):
-        restaurant = Restaurant.create(name="Restaurant Name", user_id=1)
+        restaurant = Restaurant.create(name="Restaurant Name", address="Address 1", food="Seafood", user_id=1)
         self.assertEqual(restaurant.name, "Restaurant Name")
         self.assertEqual(restaurant.user_id, 1)
 

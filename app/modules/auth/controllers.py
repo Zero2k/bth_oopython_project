@@ -121,7 +121,7 @@ def admin():
 
             partial = render_template('auth/admin/restaurants/view.html', restaurant=restaurant_data, tables=table_list)
 
-        # Add restaurant
+        # Add table
         elif (action == 'add-table'):
             restaurant_id = request.args.get('restaurantId')
             
@@ -139,7 +139,7 @@ def admin():
 
             partial = render_template('auth/admin/restaurants/tables/add.html', form=form)
 
-        # Edit restaurant
+        # Edit table
         elif (action == 'edit-table'):
             table_id = request.args.get('tableId')
             table_data = Table.get(table_id)
@@ -162,6 +162,22 @@ def admin():
 
             partial = render_template('auth/admin/restaurants/tables/edit.html', form=form)
 
+        # Delete table
+        elif (action == 'delete-table'):
+            table_id = request.args.get('tableId')
+
+            try:
+                table_to_delete = Table.get(table_id)
+
+                if (table_to_delete):
+                    Table.delete(table_to_delete)
+
+                    flash('Table was deleted!', 'success-message')
+                    return redirect(url_for('auth.admin', view=['restaurants']))
+
+            except Exception as e:
+                print(e)
+
         # Add restaurant
         elif (action == 'add'):
             user_id = session.get('user_id')
@@ -174,7 +190,7 @@ def admin():
                     restaurant = Restaurant.query.filter_by(name=form.name.data).first()
 
                     if not restaurant:
-                        Restaurant.create(name=form.name.data, address=form.address.data, user_id=user_id)
+                        Restaurant.create(name=form.name.data, address=form.address.data, food=form.food.data, user_id=user_id)
 
                         return redirect(url_for('auth.admin', view=['restaurants']))
 
@@ -190,12 +206,13 @@ def admin():
             restaurant_id = request.args.get('restaurantId')
             restaurant_data = Restaurant.get(restaurant_id)
 
-            form = RestaurantFormAdmin(request.form, name=restaurant_data.name, address=restaurant_data.address)
+            form = RestaurantFormAdmin(request.form, name=restaurant_data.name, address=restaurant_data.address, food=restaurant_data.food)
 
             try:
                 if form.validate_on_submit():
                     restaurant_data.name = form.name.data
                     restaurant_data.address = form.address.data
+                    restaurant_data.food = form.food.data
 
                     flash('Restaurant was updated!', 'success-message')
                     # Updated database with new restaurant data
@@ -211,13 +228,18 @@ def admin():
         # Delete restaurant
         elif (action == 'delete'):
             restaurant_id = request.args.get('restaurantId')
-            restaurant_to_delete = Restaurant.get(restaurant_id)
 
-            if (restaurant_to_delete):
-                Restaurant.delete(restaurant_to_delete)
+            try:
+                restaurant_to_delete = Restaurant.get(restaurant_id)
 
-                flash('Restaurant was deleted!', 'success-message')
-                return redirect(url_for('auth.admin', view=['restaurants']))
+                if (restaurant_to_delete):
+                    Restaurant.delete(restaurant_to_delete)
+
+                    flash('Restaurant was deleted!', 'success-message')
+                    return redirect(url_for('auth.admin', view=['restaurants']))
+
+            except Exception as e:
+                print(e)
 
         else:
             # Query all restaurants which an admin has created
@@ -282,16 +304,20 @@ def admin():
             user_id = request.args.get('userId')
             logged_in_user = session.get('user_id')
 
-            user_to_delete = User.get(user_id)
+            try:
+                user_to_delete = User.get(user_id)
 
-            if (int(logged_in_user) is int(user_id)):
-                flash("You can't delete yourself.", 'warning-message')
-                return redirect(url_for('auth.admin', view=['users']))
+                if (int(logged_in_user) is int(user_id)):
+                    flash("You can't delete yourself.", 'warning-message')
+                    return redirect(url_for('auth.admin', view=['users']))
 
-            else:
-                User.delete(user_to_delete)
-                flash('User was deleted!', 'success-message')
-                return redirect(url_for('auth.admin', view=['users']))
+                else:
+                    User.delete(user_to_delete)
+                    flash('User was deleted!', 'success-message')
+                    return redirect(url_for('auth.admin', view=['users']))
+
+            except Exception as e:
+                print(e)
 
         else:
             user_list = User.query.all()

@@ -15,11 +15,17 @@
             {% endfor %}
         </div>
     </div>
+
     <div class="uk-margin">
         <div class="uk-inline uk-width-1-1">
             {{ render_field(form.address, placeholder="Address", autofocus="") }}
         </div>
     </div>
+
+    <div class="uk-margin">
+        {{ render_field(form.food, placeholder="Food Type") }}
+    </div>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div>

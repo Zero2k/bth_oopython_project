@@ -18,6 +18,10 @@
         {{ render_field(form.address, placeholder="Address") }}
     </div>
 
+    <div class="uk-margin">
+        {{ render_field(form.food, placeholder="Food Type") }}
+    </div>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div>
