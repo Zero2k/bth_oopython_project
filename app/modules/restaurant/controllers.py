@@ -10,4 +10,10 @@ from app import db
 from app.modules.restaurant.models import Restaurant
 
 # Define the blueprint: 'restaurant', set its url prefix: app.url/restaurant
-restaurant = Blueprint('restaurant', __name__, url_prefix='/restaurant')
+restaurant = Blueprint('restaurant', __name__, url_prefix='/r')
+
+@restaurant.route('/all/', methods=['GET', 'POST'])
+def restaurants():
+    restaurants_list = Restaurant.query.all()
+
+    return render_template('restaurant/all.html', restaurants=restaurants_list)

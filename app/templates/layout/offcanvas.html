@@ -3,9 +3,9 @@
         <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical">
             <li {%- if request.path == "/" %} class="uk-active" {% endif %}><a href="{{ url_for('main') }}">Home</a></li>
             <li class="uk-nav-divider"></li>
-            <li><a href="#">Restaurants</a></li>
+            <li><a href="{{ url_for('restaurant.restaurants') }}">Restaurants</a></li>
             <li class="uk-nav-divider"></li>
-            <li class="uk"><a href="#">Search</a></li>
+            <li class="uk"><a href="#modal-full" uk-toggle>Search</a></li>
             <li class="uk-nav-header">Account</li>
             <li class="uk-parent">
                 {% if not session.user_id %}

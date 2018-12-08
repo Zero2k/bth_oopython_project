@@ -31,7 +31,7 @@ def signin():
     # Verify the sign in form
     if form.validate_on_submit():
 
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
 
         if user and check_password_hash(user.password, form.password.data):
 
@@ -55,12 +55,12 @@ def signup():
     # Verify the sign up form
     if form.validate_on_submit():
 
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data.lower()).first()
 
         if not user:
             password_hash = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
 
-            User.create(name=form.name.data, email=form.email.data, password=password_hash)
+            User.create(name=form.name.data.lower(), email=form.email.data.lower(), password=password_hash)
 
             return redirect(url_for('auth.signin'))
 
@@ -81,8 +81,8 @@ def profile():
 
         try:
             if form.validate_on_submit():
-                user_data.name = form.name.data
-                user_data.email = form.email.data
+                user_data.name = form.name.data.lower()
+                user_data.email = form.email.data.lower()
                 if (form.password.data == ""):
                     user_data.password = user_data.password
 
@@ -129,7 +129,7 @@ def admin():
 
             try:
                 if form.validate_on_submit():
-                    Table.create(name=form.name.data, capacity=form.capacity.data, minimum=form.minimum.data, restaurant_id=restaurant_id)
+                    Table.create(name=form.name.data.lower(), capacity=form.capacity.data, minimum=form.minimum.data, restaurant_id=restaurant_id)
 
                     flash('Table was created!', 'success-message')
                     return redirect(url_for('auth.admin', view=['restaurants']))
@@ -148,9 +148,9 @@ def admin():
 
             try:
                 if form.validate_on_submit():
-                    table_data.name = form.name.data
-                    table_data.capacity = form.capacity.data
-                    table_data.minimum = form.minimum.data
+                    table_data.name = form.name.data.lower()
+                    table_data.capacity = form.capacity.data.lower()
+                    table_data.minimum = form.minimum.data.lower()
                     flash('Table was updated!', 'success-message')
                     # Updated database with new table data
                     Table.update(table_data)
@@ -187,10 +187,10 @@ def admin():
             try:
                 if form.validate_on_submit():
 
-                    restaurant = Restaurant.query.filter_by(name=form.name.data).first()
+                    restaurant = Restaurant.query.filter_by(name=form.name.data.lower()).first()
 
                     if not restaurant:
-                        Restaurant.create(name=form.name.data, address=form.address.data, food=form.food.data, user_id=user_id)
+                        Restaurant.create(name=form.name.data.lower(), address=form.address.data.lower(), food=form.food.data.lower(), user_id=user_id)
 
                         return redirect(url_for('auth.admin', view=['restaurants']))
 
@@ -210,9 +210,9 @@ def admin():
 
             try:
                 if form.validate_on_submit():
-                    restaurant_data.name = form.name.data
-                    restaurant_data.address = form.address.data
-                    restaurant_data.food = form.food.data
+                    restaurant_data.name = form.name.data.lower()
+                    restaurant_data.address = form.address.data.lower()
+                    restaurant_data.food = form.food.data.lower()
 
                     flash('Restaurant was updated!', 'success-message')
                     # Updated database with new restaurant data
@@ -279,9 +279,9 @@ def admin():
 
             try:
                 if form.validate_on_submit():
-                    user_data.name = form.name.data
-                    user_data.email = form.email.data
-                    user_data.role = form.role.data
+                    user_data.name = form.name.data.lower()
+                    user_data.email = form.email.data.lower()
+                    user_data.role = form.role.data.lower()
                     if (form.password.data == ""):
                         user_data.password = user_data.password
 

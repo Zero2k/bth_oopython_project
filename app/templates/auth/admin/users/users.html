@@ -15,7 +15,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
-            <td>{{ user.date_created }}</td>
+            <td>{{ user.date_created.strftime('%Y-%m-%d') }}</td>
             <td class="uk-table-shrink uk-text-nowrap">
                 <a href="{{ url_for('auth.admin', view=['users'], action=['edit'], userId=[user.id]) }}">Edit</a> | 
                 <a href="{{ url_for('auth.admin', view=['users'], action=['delete'], userId=[user.id]) }}" class="delete" data-confirm="Are you sure to delete this item?">Delete</a>
