@@ -17,3 +17,14 @@ def restaurants():
     restaurants_list = Restaurant.query.all()
 
     return render_template('restaurant/all.html', restaurants=restaurants_list)
+
+@restaurant.route('<int:restaurant_id>', methods=['GET'])
+def show_restaurant(restaurant_id):
+
+    try:
+        restaurant = Restaurant.get_or_404(restaurant_id)
+
+        return render_template('restaurant/view.html', restaurant=restaurant)
+
+    except Exception as e:
+        return redirect(url_for('restaurant.restaurants'))

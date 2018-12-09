@@ -1,3 +1,4 @@
+from flask import abort
 from app import db
 
 class ORMClass(object):
@@ -28,7 +29,7 @@ class ORMClass(object):
 
     @classmethod
     def get_or_404(cls, id):
-        rv = cls.get(id)
+        rv = cls.query.get(id)
         if rv is None:
             abort(404)
         return rv
