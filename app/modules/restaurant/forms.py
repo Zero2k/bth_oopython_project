@@ -15,3 +15,8 @@ class TableFormAdmin(FlaskForm):
                 Required(message='Must provide a name.'), Length(min=3, max=35)])
     capacity = IntegerField('capacity')
     minimum  = IntegerField('minimum')
+
+class ReservationForm(FlaskForm):
+    email    = TextField('email')
+    people   = SelectField('people', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4')])
+    table    = SelectField('table')

@@ -30,4 +30,4 @@ class ChangeUserFormAdmin(FlaskForm):
     name     = TextField('name')
     email    = TextField('email', [Email()])
     password = PasswordField('password', [Optional(), Length(min=6, max=35)])
-    role = SelectField('role', choices=[('1', 'Admin'), ('0', 'User')])
+    role     = SelectField('role', choices=[('1', 'Admin'), ('0', 'User')])
