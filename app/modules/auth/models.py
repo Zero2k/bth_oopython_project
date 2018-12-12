@@ -19,6 +19,7 @@ class User(Base, ORMClass):
     status   = db.Column(db.SmallInteger, nullable=False, default=0)
 
     restaurants  = db.relationship('Restaurant', backref='restaurant', lazy=True)
+    bookings  = db.relationship('Booking', backref='booking', lazy=True)
 
     def __repr__(self):
-        return '<User %r>' % (self.name)  
+        return '<User %r>' % (self.name)

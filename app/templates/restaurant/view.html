@@ -106,6 +106,11 @@
                         <div class="uk-width-1-2@m">
                             <label class="uk-form-label" for="form-stacked-select">Table</label>
                             {{ render_field(form.table, placeholder="Table") }}
+                            {% for errors in form.errors.table %}
+                            <small>
+                                {{ errors }}
+                            </small>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -113,7 +118,7 @@
                         {% if messages %}
                         <div>
                         {% for category, message in messages %}
-                            {% if category == "error-message" %}
+                            {% if category == "success-message" %}
                                 {{ message }}<br>
                             {% endif %}
                         {% endfor %}

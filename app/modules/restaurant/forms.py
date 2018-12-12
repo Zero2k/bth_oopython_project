@@ -17,6 +17,7 @@ class TableFormAdmin(FlaskForm):
     minimum  = IntegerField('minimum')
 
 class ReservationForm(FlaskForm):
-    email    = TextField('email')
+    email    = TextField('email', [Email(),
+                Required(message='Forgot your email address?')])
     people   = SelectField('people', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4')])
-    table    = SelectField('table')
+    table    = SelectField('table', coerce=int)
