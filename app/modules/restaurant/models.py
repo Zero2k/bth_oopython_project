@@ -15,8 +15,7 @@ class Restaurant(Base, ORMClass):
     user_id     = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def get_available_tables(cls, rId):
-        #return Table.query.join(Booking, Booking.table_id != Table.id, isouter=True).filter(Table.id != Booking.table_id).filter(Table.restaurant_id == id).all()
-        sql = "SELECT * FROM table_data as T JOIN booking as B ON T.id != B.table_id WHERE T.restaurant_id = :id"
+        sql = "SELECT * FROM table_data WHERE table_data.id NOT IN (SELECT table_id FROM booking) AND table_data.restaurant_id = :id"
         return db.engine.execute(sql, {'id': rId})
 
 
@@ -43,5 +42,5 @@ class Booking(Base, ORMClass):
 
     # Booking fields
     email         = db.Column(db.String(250), nullable=False)
-    user_id       = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     table_id      = db.Column(db.Integer, db.ForeignKey('table_data.id'))

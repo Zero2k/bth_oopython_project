@@ -6,7 +6,7 @@ from app import db
 
 # Import module models (i.e. Restaurant)
 from app.modules.auth.models import User
-from app.modules.restaurant.models import Restaurant, Booking
+from app.modules.restaurant.models import Restaurant, Booking, Table
 from app.modules.restaurant.forms import ReservationForm
 
 # Define the blueprint: 'restaurant', set its url prefix: app.url/restaurant
@@ -35,9 +35,21 @@ def show_restaurant(restaurant_id):
         form.table.choices = [(table.id, table.name.title()) for table in available_tables]
 
         if form.validate_on_submit():
-            print(form.data)
-            flash('Reservation was created!', 'success-message')
-            return redirect(url_for('auth.profile'))
+            table_data = Table.get(form.table.data)
+
+            if (int(table_data.capacity) >= int(form.people.data)):
+                flash('Reservation was created!', 'success-message')
+
+                if (user_id):
+                    Booking.create(email=form.email.data, user_id=user_id, table_id=table_data.id)
+                    return redirect(url_for('auth.profile'))
+
+                else:
+                    Booking.create(email=form.email.data, table_id=table_data.id)
+                    return redirect(url_for('restaurant.show_restaurant', restaurant_id=restaurant_id))
+
+            else:
+                flash('Not enought space!', 'warning-message')
 
         return render_template('restaurant/view.html', restaurant=restaurant_data, form=form)
 
