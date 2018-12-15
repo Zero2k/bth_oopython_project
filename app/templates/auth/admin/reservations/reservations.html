@@ -1,8 +1,9 @@
-<h6>MY RESERVATIONS</h6>
+<h6>ALL RESERVATIONS</h6>
 <table class="uk-table uk-table-divider">
     <thead>
         <tr>
             <th>Email</th>
+            <th>User ID</th>
             <th>Table ID</th>
             <th>Created At</th>
             <th>Action</th>
@@ -12,10 +13,11 @@
         {% for reservation in reservations %}
         <tr>
             <td>{{ reservation.email }}</td>
+            <td>{{ reservation.user_id }}</td>
             <td>{{ reservation.table_id }}</td>
             <td>{{ reservation.date_created.strftime('%Y-%m-%d') }}</td>
             <td class="uk-table-shrink uk-text-nowrap">
-                <a href="{{ url_for('auth.profile', view=['reservations'], action=['delete'], bookingId=[reservation.id]) }}" class="delete" data-confirm="Are you sure to delete this reservation?">Delete</a>
+                <a href="{{ url_for('auth.admin', view=['reservations'], action=['delete'], bookingId=[reservation.id]) }}" class="delete" data-confirm="Are you sure to delete this reservation?">Delete</a>
             </td>
         </tr>
         {% endfor %}

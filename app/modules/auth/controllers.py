@@ -17,7 +17,7 @@ from app.modules.restaurant.forms import RestaurantFormAdmin, TableFormAdmin
 
 # Import module models (i.e. User)
 from app.modules.auth.models import User
-from app.modules.restaurant.models import Restaurant, Table
+from app.modules.restaurant.models import Restaurant, Table, Booking
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 auth = Blueprint('auth', __name__, url_prefix='/auth')
@@ -73,6 +73,7 @@ def signup():
 @require_auth
 def profile():
     view = request.args.get('view')
+    action = request.args.get('action')
     user_id = session.get('user_id')
 
     if (view == 'change-profile'):
@@ -101,7 +102,11 @@ def profile():
         partial = render_template('auth/profile/change-profile.html', user=user_data, form=form)
 
     else:
-        partial = render_template('auth/profile/reservations.html')
+        my_reservations = Booking.query.filter(Booking.user_id == user_id).all()
+        #user_data = User.get(user_id)
+        #my_reservations2 = user_data.bookings
+        #print(my_reservations2)
+        partial = render_template('auth/profile/reservations.html', reservations=my_reservations)
 
     return render_template('auth/profile/profile.html', render=partial)
 
@@ -245,6 +250,28 @@ def admin():
             # Query all restaurants which an admin has created
             restaurant_list = Restaurant.query.filter(User.role == 1).all()
             partial = render_template('auth/admin/restaurants/restaurants.html', restaurants=restaurant_list)
+
+    elif (view == 'reservations'):
+        # Delete reservations
+        if (action == 'delete'):
+            booking_id = request.args.get('bookingId')
+
+            try:
+                booking_to_delete = Booking.get(booking_id)
+
+                if (booking_to_delete):
+                    Booking.delete(booking_to_delete)
+
+                    flash('Booking was deleted!', 'success-message')
+                    return redirect(url_for('auth.admin', view=['reservations']))
+
+            except Exception as e:
+                print(e)
+
+        # View all reservations
+        else:
+            reservation_list = Booking.query.all()
+            partial = render_template('auth/admin/reservations/reservations.html', reservations=reservation_list)
 
     else:
         # Add user
