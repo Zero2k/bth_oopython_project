@@ -16,10 +16,13 @@ app.config.from_object('config')
 # Define the database object which is imported
 # by modules and controllers
 db = SQLAlchemy(app)
+from app.modules.restaurant.models import Restaurant
 
 @app.route('/')
 def main():
-    return render_template("home.html")
+    restaurants_list = Restaurant.query.limit(3).all()
+
+    return render_template("home.html", restaurants=restaurants_list)
 
 # Sample HTTP error handling
 @app.errorhandler(404)

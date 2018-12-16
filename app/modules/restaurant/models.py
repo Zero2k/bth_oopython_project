@@ -15,9 +15,17 @@ class Restaurant(Base, ORMClass):
     user_id     = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def get_available_tables(cls, rId):
-        sql = "SELECT * FROM table_data WHERE table_data.id NOT IN (SELECT table_id FROM booking) AND table_data.restaurant_id = :id"
-        return db.engine.execute(sql, {'id': rId})
+        bookings_query = Booking.query.with_entities(Booking.table_id).all()
+        bookings = [booking for (booking, ) in bookings_query]
+        return Table.query.filter(Table.id.notin_(bookings)).filter(Table.restaurant_id == rId).all()
 
+        #sql = "SELECT * FROM table_data WHERE table_data.id NOT IN (SELECT table_id FROM booking) AND table_data.restaurant_id = :id"
+        #return db.engine.execute(sql, {'id': rId})
+
+    def get_booked_tables(cls, rId):
+        bookings_query = Booking.query.with_entities(Booking.table_id).all()
+        bookings = [r for (r, ) in bookings_query]
+        return Table.query.filter(Table.id.in_(bookings)).filter(Table.restaurant_id == rId).all()
 
 # Define a Table model
 class Table(Base, ORMClass):

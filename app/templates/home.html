@@ -7,6 +7,7 @@
     <h3 class="uk-heading-line uk-text-center"><span>Popular Restaurants</span></h3>
 
     <div class="uk-child-width-expand@m" uk-grid>
+        {% for restaurant in restaurants %}
         <div>
             <div>
                 <div class="uk-card uk-card-default uk-card-hover">
@@ -14,8 +15,10 @@
                         <img src="https://getuikit.com/docs/images/light.jpg" alt="">
                     </div>
                     <div class="uk-card-body">
-                        <h3 class="uk-card-title">The Modern</h3>
-                        <p>Italian | Midtown West</p>
+                        <a href="{{ url_for('restaurant.show_restaurant', restaurant_id=restaurant.id) }}">
+                            <h3 class="uk-card-title">{{ restaurant.name.title() }}</h3>
+                        </a>
+                        <p>{{ restaurant.food.title() }} | {{ restaurant.address.title() }}</p>
                         <div>
                             <span class="checked" uk-icon="star"></span>
                             <span class="checked" uk-icon="star"></span>
@@ -25,57 +28,12 @@
                         </div>
                     </div>
                     <div class="uk-card-footer">
-                        <a href="#" class="uk-button uk-button-text">Read more</a>
+                        <a href="{{ url_for('restaurant.show_restaurant', restaurant_id=restaurant.id) }}" class="uk-button uk-button-text">Read more</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
-            <div>
-                <div class="uk-card uk-card-default uk-card-hover">
-                    <div class="uk-card-media-top">
-                        <img src="https://getuikit.com/docs/images/light.jpg" alt="">
-                    </div>
-                    <div class="uk-card-body">
-                        <h3 class="uk-card-title">Cookshop</h3>
-                        <p>Seafood | Midtown West</p>
-                        <div>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span uk-icon="star"></span>
-                        </div>
-                    </div>
-                    <div class="uk-card-footer">
-                        <a href="#" class="uk-button uk-button-text">Read more</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div>
-                <div class="uk-card uk-card-default uk-card-hover">
-                    <div class="uk-card-media-top">
-                        <img src="https://getuikit.com/docs/images/light.jpg" alt="">
-                    </div>
-                    <div class="uk-card-body">
-                        <h3 class="uk-card-title">Raoul's</h3>
-                        <p>French | SoHo</p>
-                        <div>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                            <span class="checked" uk-icon="star"></span>
-                        </div>
-                    </div>
-                    <div class="uk-card-footer">
-                        <a href="#" class="uk-button uk-button-text">Read more</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <p class="uk-text-center" uk-margin>

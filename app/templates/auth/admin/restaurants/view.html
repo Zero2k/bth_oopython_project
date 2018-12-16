@@ -13,6 +13,12 @@
         </div>
     </div>
 
+    <ul class="uk-subnav uk-subnav-pill">
+        <li><a href="{{ url_for('auth.admin', view=['restaurants'], action=['overview'], restaurantId=[restaurant.id]) }}">All</a></li>
+        <li><a href="{{ url_for('auth.admin', view=['restaurants'], action=['overview'], restaurantId=[restaurant.id], sort=['booked']) }}">Booked</a></li>
+        <li><a href="{{ url_for('auth.admin', view=['restaurants'], action=['overview'], restaurantId=[restaurant.id], sort=['available']) }}">Available</a></li>
+    </ul>
+
     <table class="uk-table">
         <caption>Restaurant Tables</caption>
         <thead>
@@ -21,6 +27,7 @@
                 <th>Name</th>
                 <th>Capacity</th>
                 <th>Minimum</th>
+                <th>Availability</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -31,6 +38,7 @@
                 <td>{{ table.name }}</td>
                 <td>{{ table.capacity }}</td>
                 <td>{{ table.minimum }}</td>
+                <td>{{ 'Booked' if table.check_availability(table.id) else 'Available' }}</td>
                 <td class="uk-table-shrink uk-text-nowrap">
                     <a href="{{ url_for('auth.admin', view=['restaurants'], action=['edit-table'], tableId=[table.id]) }}">Edit</a> | 
                     <a href="{{ url_for('auth.admin', view=['restaurants'], action=['delete-table'], tableId=[table.id]) }}" class="delete" data-confirm="Are you sure to delete this item?">Delete</a>

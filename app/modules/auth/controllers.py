@@ -102,11 +102,28 @@ def profile():
         partial = render_template('auth/profile/change-profile.html', user=user_data, form=form)
 
     else:
-        my_reservations = Booking.query.filter(Booking.user_id == user_id).all()
-        #user_data = User.get(user_id)
-        #my_reservations2 = user_data.bookings
-        #print(my_reservations2)
-        partial = render_template('auth/profile/reservations.html', reservations=my_reservations)
+        # Delete booking
+        if (action == 'delete'):
+            booking_id = request.args.get('bookingId')
+
+            try:
+                booking_to_delete = Booking.get(booking_id)
+
+                if (booking_to_delete):
+                    Booking.delete(booking_to_delete)
+
+                    flash('Booking was deleted!', 'success-message')
+                    return redirect(url_for('auth.profile', view=['reservations']))
+
+            except Exception as e:
+                print(e)
+
+        else:
+            my_reservations = Booking.query.filter(Booking.user_id == user_id).all()
+            #user_data = User.get(user_id)
+            #my_reservations2 = user_data.bookings
+            #print(my_reservations2)
+            partial = render_template('auth/profile/reservations.html', reservations=my_reservations)
 
     return render_template('auth/profile/profile.html', render=partial)
 
@@ -116,13 +133,21 @@ def profile():
 def admin():
     view = request.args.get('view')
     action = request.args.get('action')
+    sort = request.args.get('sort')
 
     if (view == 'restaurants'):
         # View restaurant
         if (action == 'overview'):
             restaurant_id = request.args.get('restaurantId')
             restaurant_data = Restaurant.get(restaurant_id)
-            table_list = Table.query.filter(Table.restaurant_id == restaurant_id).all()
+
+            # Filter restaurant reservations
+            if (sort == 'booked'):
+                table_list = restaurant_data.get_booked_tables(restaurant_data.id)
+            elif (sort == 'available'):
+                table_list = restaurant_data.get_available_tables(restaurant_data.id)
+            else:
+                table_list = Table.query.filter(Table.restaurant_id == restaurant_id).all()
 
             partial = render_template('auth/admin/restaurants/view.html', restaurant=restaurant_data, tables=table_list)
 
