@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
+""" Init App """
 
 # Import flask and template operators
 from flask import Flask, render_template
@@ -16,17 +17,20 @@ app.config.from_object('config')
 # Define the database object which is imported
 # by modules and controllers
 db = SQLAlchemy(app)
+
 from app.modules.restaurant.models import Restaurant
 
 @app.route('/')
 def main():
+    """ Render home page """
     restaurants_list = Restaurant.query.limit(3).all()
 
     return render_template("home.html", restaurants=restaurants_list)
 
 # Sample HTTP error handling
 @app.errorhandler(404)
-def not_found(error):
+def not_found():
+    """ Render 404 page """
     return render_template('404.html', title="Page Not Found"), 404
 
 # Import a modules / components using its blueprint handler variable

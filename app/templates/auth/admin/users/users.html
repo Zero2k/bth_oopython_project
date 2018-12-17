@@ -16,10 +16,10 @@
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ 'Admin' if user.role == 1 else 'User' }}</td>
             <td>{{ user.date_created.strftime('%Y-%m-%d') }}</td>
             <td class="uk-table-shrink uk-text-nowrap">
-                <a href="">View</a> | 
+                <a href="{{ url_for('auth.admin', view=['users'], action=['view'], userId=[user.id]) }}">View</a> | 
                 <a href="{{ url_for('auth.admin', view=['users'], action=['edit'], userId=[user.id]) }}">Edit</a> | 
                 <a href="{{ url_for('auth.admin', view=['users'], action=['delete'], userId=[user.id]) }}" class="delete" data-confirm="Are you sure to delete this item?">Delete</a>
             </td>

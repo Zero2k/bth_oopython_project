@@ -11,13 +11,15 @@
             <li class="uk-active" uk-filter-control><a href="#">All</a></li>
             <li uk-filter-control=".tag-american"><a href="#">American</a></li>
             <li uk-filter-control=".tag-seafood"><a href="#">Seafood</a></li>
+            <li uk-filter-control=".tag-steakhouse"><a href="#">Steakhouse</a></li>
+            <li uk-filter-control=".tag-italian"><a href="#">Italian</a></li>
         </ul>
         <ul class="js-filter uk-child-width-1-3@m" uk-grid>
         {% for restaurant in restaurants %}
             <li class="tag-{{restaurant.food}}">
                 <div class="uk-card uk-card-default uk-card-hover">
                     <div class="uk-card-media-top">
-                        <img src="https://getuikit.com/docs/images/light.jpg" alt="">
+                        <img src="{{ url_for('static',filename='img/restaurant_alt1.jpg') }}" alt="">
                     </div>
                     <div class="uk-card-body">
                         <a href="{{ url_for('restaurant.show_restaurant', restaurant_id=restaurant.id) }}">

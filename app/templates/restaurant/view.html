@@ -8,7 +8,8 @@
 <div class="uk-container uk-padding" uk-height-viewport="offset-top: true; offset-bottom: true">
     <div class="uk-grid-divider" uk-grid>
         <div class="uk-width-2-3@m">
-            <h2>{{ restaurant.name.title() }}</h2>
+            <h2 style="margin-bottom: 10px">{{ restaurant.name.title() }}</h2>
+            <h4 class="uk-heading-divider" style="margin-top: 0; margin-bottom: 20px">{{ restaurant.address.title() }}</h4>
             <div>
                 <ul class="uk-subnav uk-subnav-pill" uk-switcher="animation: uk-animation-fade">
                     <li><a href="#">Overview</a></li>
@@ -18,7 +19,7 @@
                 
                 <ul class="uk-switcher uk-margin">
                     <li>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+                        <p>{{ restaurant.name.title() }}'s flagship restaurant, located on Waverly Place in Greenwich Village, opened to great acclaim in 1998 and is as bustling and popular as ever. It offers three-star dining that redefines and reinvents the principles of Italian cuisine for 21st century America. An epic, landmark wine list, an exciting, quintessentially New York dining room and expert, attentive and cordial service make a table at Babbo one of New York’s prized possessions.</p>
                     </li>
                     <li>
                         <table class="uk-table uk-table-divider">

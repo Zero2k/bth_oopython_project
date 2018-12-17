@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th>Email</th>
-            <th>User ID</th>
+            <th>User</th>
             <th>Table ID</th>
             <th>Created At</th>
             <th>Action</th>
@@ -13,7 +13,7 @@
         {% for reservation in reservations %}
         <tr>
             <td>{{ reservation.email }}</td>
-            <td>{{ reservation.user_id }}</td>
+            <td>{{ 'Verified' if reservation.user_id else 'Guest' }}</td>
             <td>{{ reservation.table_id }}</td>
             <td>{{ reservation.date_created.strftime('%Y-%m-%d') }}</td>
             <td class="uk-table-shrink uk-text-nowrap">

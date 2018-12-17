@@ -8,7 +8,7 @@ class RestaurantFormAdmin(FlaskForm):
     name     = TextField('name', [
                 Required(message='Must provide a name.'), Length(min=6, max=35)])
     address  = TextField('address')
-    food     = SelectField('food', choices=[('american', 'American'), ('seafood', 'Seafood')])
+    food     = SelectField('food', choices=[('american', 'American'), ('seafood', 'Seafood'), ('steakhouse', 'Steakhouse'), ('italian', 'Italian')])
 
 class TableFormAdmin(FlaskForm):
     name     = TextField('name', [

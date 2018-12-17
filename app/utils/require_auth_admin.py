@@ -1,5 +1,11 @@
-from flask import flash, session, redirect, url_for
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+"""
+Require Auth for Admin
+"""
+
 from functools import wraps
+from flask import flash, session, redirect, url_for
 
 def require_auth_admin(func):
     @wraps(func)

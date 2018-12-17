@@ -6,7 +6,8 @@ body {
     font-family: 'Varela Round';
 }
 
-.tm-button-default, .tm-button-primary {
+.tm-button-default,
+.tm-button-primary {
     border-radius: 500px;
 }
 

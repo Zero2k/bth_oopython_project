@@ -323,6 +323,13 @@ def admin():
             partial = render_template('auth/admin/users/add.html', form=form)
 
         # Edit user
+        elif (action == 'view'):
+            user_id = request.args.get('userId')
+            user_data = User.get(user_id)
+
+            partial = render_template('auth/admin/users/view.html', user=user_data)
+
+        # Edit user
         elif (action == 'edit'):
             user_id = request.args.get('userId')
             user_data = User.get(user_id)
