@@ -16,7 +16,8 @@
         <thead>
             <tr>
                 <th>Email</th>
-                <th>Table ID</th>
+                <th>Restaurant</th>
+                <th>Table</th>
                 <th>Created At</th>
                 <th>Action</th>
             </tr>
@@ -25,7 +26,8 @@
             {% for reservation in user.bookings %}
             <tr>
                 <td>{{ reservation.email }}</td>
-                <td>{{ reservation.table_id }}</td>
+                <td>{{ reservation.table.restaurant.name.title() }}</td>
+                <td>{{ reservation.table.name.title() }}</td>
                 <td>{{ reservation.date_created.strftime('%Y-%m-%d') }}</td>
                 <td class="uk-table-shrink uk-text-nowrap">
                     <a href="{{ url_for('auth.admin', view=['reservations'], action=['delete'], bookingId=[reservation.id]) }}" class="delete" data-confirm="Are you sure to delete this reservation?">Delete</a>
