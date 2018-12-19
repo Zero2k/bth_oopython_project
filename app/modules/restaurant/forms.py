@@ -33,3 +33,9 @@ class ReservationForm(FlaskForm):
     people = SelectField('people', choices=[('1', '1'), ('2', '2'), \
         ('3', '3'), ('4', '4')])
     table = SelectField('table', coerce=int)
+
+class SearchForm(FlaskForm):
+    """ Search Form """
+    query = TextField('query', [
+        Required(message='Must provide a query.'), Length(min=3, max=35, \
+            message="Query must be at least 3 character long")])

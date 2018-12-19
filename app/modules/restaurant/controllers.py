@@ -10,16 +10,18 @@ from flask import Blueprint, request, \
 
 # Import the database object from the main app module
 #from app import db
+from app.utils.binary_search import binary_search
+from app.utils.exception_handler import ShowRestaurant, SearchRestaurant
 
 # Import module models (i.e. Restaurant)
 from app.modules.auth.models import User
 from app.modules.restaurant.models import Restaurant, Booking, Table
-from app.modules.restaurant.forms import ReservationForm
+from app.modules.restaurant.forms import ReservationForm, SearchForm
 
 # Define the blueprint: 'restaurant', set its url prefix: app.url/restaurant
 restaurant = Blueprint('restaurant', __name__, url_prefix='/r')
 
-@restaurant.route('/all/', methods=['GET', 'POST'])
+@restaurant.route('/all', methods=['GET', 'POST'])
 def restaurants():
     """ Restaurants Route """
     restaurants_list = Restaurant.query.all()
@@ -66,5 +68,32 @@ def show_restaurant(restaurant_id):
         return render_template('restaurant/view.html', \
             restaurant=restaurant_data, form=form)
 
-    except Exception:
+    except ShowRestaurant:
         return redirect(url_for('restaurant.restaurants'))
+
+@restaurant.route('/search', methods=['GET', 'POST'])
+def search():
+    """ Search Restaurant Route """
+
+    try:
+        restaurants_list = Restaurant.query.order_by("name").all()
+        form = SearchForm(request.form)
+        message = ""
+
+        if form.validate_on_submit():
+            query = form.query.data
+
+            result = binary_search(restaurants_list, query)
+
+            if result is None:
+                restaurants_list = []
+                message = "No results found"
+            else:
+                restaurants_list = result
+                message = ""
+
+        return render_template('restaurant/search.html', form=form, \
+            restaurants=restaurants_list, message=message)
+
+    except SearchRestaurant:
+        return redirect(url_for('restaurant.search'))

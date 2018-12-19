@@ -23,7 +23,7 @@ from app.modules.restaurant.models import Restaurant
 @app.route('/')
 def main():
     """ Render home page """
-    restaurants_list = Restaurant.query.limit(3).all()
+    restaurants_list = Restaurant.query.limit(6).all()
 
     return render_template("home.html", restaurants=restaurants_list)
 

@@ -17,6 +17,9 @@ from werkzeug import check_password_hash, generate_password_hash
 # Import the require_auth decorator from utils
 from app.utils.require_auth import require_auth
 from app.utils.require_auth_admin import require_auth_admin
+from app.utils.exception_handler import EmailExists, AddTable, DeleteUser, \
+    EditTable, DeleteTable, DeleteBooking, AddRestaurant, EditRestaurant, \
+    DeleteRestaurant
 
 # Import module forms
 from app.modules.auth.forms import LoginForm, SignupForm, \
@@ -114,7 +117,7 @@ def profile():
 
                 return redirect(url_for('auth.profile'))
 
-        except Exception as e:
+        except EmailExists:
             flash('Email already exists', 'error-message')
 
         partial = render_template('auth/profile/change-profile.html', \
@@ -135,15 +138,13 @@ def profile():
                     return redirect(url_for('auth.profile', \
                         view=['reservations']))
 
-            except Exception as e:
-                print(e)
+            except DeleteBooking:
+                flash('An error occurred when trying to \
+                    delete the booking', 'error-message')
 
         else:
             my_reservations = Booking.query \
                 .filter(Booking.user_id == user_id).all()
-            #user_data = User.get(user_id)
-            #my_reservations2 = user_data.bookings
-            #print(my_reservations2)
             partial = render_template('auth/profile/reservations.html', \
                 reservations=my_reservations)
 
@@ -194,8 +195,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                         view=['restaurants']))
 
-            except Exception as e:
-                print(e)
+            except AddTable:
+                flash('An error occurred when trying to \
+                    add the user', 'error-message')
 
             partial = render_template( \
                 'auth/admin/restaurants/tables/add.html', form=form)
@@ -220,8 +222,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                         view=['restaurants']))
 
-            except Exception as e:
-                print(e)
+            except EditTable:
+                flash('An error occurred when trying to \
+                    edit the user', 'error-message')
 
             partial = render_template( \
                 'auth/admin/restaurants/tables/edit.html', form=form)
@@ -240,8 +243,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                         view=['restaurants']))
 
-            except Exception as e:
-                print(e)
+            except DeleteTable:
+                flash('An error occurred when trying to \
+                    delete the table', 'error-message')
 
         # Add restaurant
         elif action == 'add':
@@ -265,8 +269,9 @@ def admin():
 
                     flash('Restaurant already exists', 'error-message')
 
-            except Exception as e:
-                print(e)
+            except AddRestaurant:
+                flash('An error occurred when trying to \
+                    add the user', 'error-message')
 
             partial = render_template( \
                 'auth/admin/restaurants/add.html', form=form)
@@ -293,8 +298,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                         view=['restaurants']))
 
-            except Exception as e:
-                print(e)
+            except EditRestaurant:
+                flash('An error occurred when trying to \
+                    update the restaurant', 'error-message')
 
             partial = render_template( \
                 'auth/admin/restaurants/edit.html', form=form)
@@ -313,8 +319,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                         view=['restaurants']))
 
-            except Exception as e:
-                print(e)
+            except DeleteRestaurant:
+                flash('An error occurred when trying to \
+                    delete the restaurant', 'error-message')
 
         else:
             # Query all restaurants which an admin has created
@@ -338,8 +345,9 @@ def admin():
                     return redirect(url_for('auth.admin', \
                     view=['reservations']))
 
-            except Exception as e:
-                print(e)
+            except DeleteBooking:
+                flash('An error occurred when trying to \
+                    delete the booking', 'error-message')
 
         # View all reservations
         else:
@@ -373,8 +381,8 @@ def admin():
 
                     flash('User already exists', 'error-message')
 
-            except Exception as e:
-                print(e)
+            except EmailExists:
+                flash('User already exists', 'error-message')
 
             partial = render_template('auth/admin/users/add.html', form=form)
 
@@ -414,7 +422,7 @@ def admin():
 
                     return redirect(url_for('auth.admin', view=['users']))
 
-            except Exception as e:
+            except EmailExists:
                 flash('Email already exists', 'error-message')
 
             partial = render_template( \
@@ -436,8 +444,9 @@ def admin():
                 flash('User was deleted!', 'success-message')
                 return redirect(url_for('auth.admin', view=['users']))
 
-            except Exception as e:
-                print(e)
+            except DeleteUser:
+                flash('An error occurred when trying to \
+                    delete the user', 'error-message')
 
         else:
             user_list = User.query.all()
