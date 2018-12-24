@@ -213,8 +213,8 @@ def admin():
             try:
                 if form.validate_on_submit():
                     table_data.name = form.name.data.lower()
-                    table_data.capacity = form.capacity.data.lower()
-                    table_data.minimum = form.minimum.data.lower()
+                    table_data.capacity = form.capacity.data
+                    table_data.minimum = form.minimum.data
                     flash('Table was updated!', 'success-message')
                     # Updated database with new table data
                     Table.update(table_data)

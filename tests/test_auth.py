@@ -5,6 +5,7 @@ Test Auth Module
 """
 
 import unittest
+from werkzeug import generate_password_hash
 
 from app import db
 from app.modules.auth.models import User
@@ -35,3 +36,17 @@ class TestAuthModule(unittest.TestCase):
         updated_user.email = "test@test.com"
 
         User.update(updated_user)
+
+    def test_create_user(self):
+        """ Create User """
+        password_hash = generate_password_hash("12345", \
+            method='pbkdf2:sha256', salt_length=8)
+
+        username = "testUser"
+
+        new_user = User.create(name=username.lower(), \
+            email="testuser@test.com", password=password_hash)
+        self.assertEqual(new_user.name, "testuser")
+        self.assertEqual(new_user.email, "testuser@test.com")
+
+        User.delete(new_user)

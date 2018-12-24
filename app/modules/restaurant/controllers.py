@@ -50,7 +50,7 @@ def show_restaurant(restaurant_id):
         if form.validate_on_submit():
             table_data = Table.get(form.table.data)
 
-            if int(table_data.capacity) >= int(form.people.data):
+            if int(table_data.minimum) <= int(form.people.data) and int(table_data.capacity >= int(form.people.data)):
                 flash('Reservation was created!', 'success-message')
 
                 if user_id:
