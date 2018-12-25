@@ -20,7 +20,20 @@ class TestRestaurantModule(unittest.TestCase):
         self.assertEqual(restaurant.address, "address 1")
         self.assertEqual(restaurant.user_id, 1)
 
-        Restaurant.delete(restaurant)
+    def test_edit_restaurant(self):
+        """ Update Restaurant """
+        current_restaurant = Restaurant.query.order_by('-id').first()
+
+        current_restaurant.name = "restaurant Edit"
+        current_restaurant.address = "address 2"
+
+        Restaurant.update(current_restaurant)
+
+        updated_restaurant = Restaurant.query.order_by('-id').first()
+        self.assertEqual(updated_restaurant.name, "restaurant Edit")
+        self.assertEqual(updated_restaurant.address, "address 2")
+
+        Restaurant.delete(updated_restaurant)
 
     def test_create_table(self):
         """ Create Table """
@@ -29,6 +42,23 @@ class TestRestaurantModule(unittest.TestCase):
         table = Table.create(name="table 1", capacity=4, minimum=2, \
             restaurant_id=restaurant.id)
         self.assertEqual(table.restaurant_id, restaurant.id)
+
+    def test_edit_table(self):
+        """ Update Table """
+        current_table = Table.query.order_by('-id').first()
+
+        current_table.name = "table test"
+        current_table.capacity = 3
+        current_table.minimum = 3
+
+        Table.update(current_table)
+
+        updated_table = Table.query.order_by('-id').first()
+        self.assertEqual(updated_table.name, "table test")
+        self.assertEqual(updated_table.capacity, 3)
+        self.assertEqual(updated_table.minimum, 3)
+
+        Table.delete(updated_table)
 
     def test_create_booking(self):
         """ Create Booking """
